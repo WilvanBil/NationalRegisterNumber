@@ -1,6 +1,6 @@
 ﻿namespace NationalRegisterNumber;
 
-public static class NationalRegisterNumber
+public static class NationalRegisterNumberGenerator
 {
     private const int Divisor = 97;
     private const int FollowNumberMin = 1;
@@ -58,7 +58,7 @@ public static class NationalRegisterNumber
             throw new ArgumentException($"Birthdate can't be before {AbsoluteMinDate.ToShortDateString()}", nameof(birthDate));
 
         if (birthDate > DateTime.Today)
-            throw new ArgumentException($"Date of birth should be smaller than today {DateTime.Today.ToShortDateString()}", nameof(birthDate));
+            throw new ArgumentException($"Date of birth should be before today {DateTime.Today.ToShortDateString()}", nameof(birthDate));
 
         if (followNumber < FollowNumberMin || followNumber > FollowNumberMax)
             throw new ArgumentException("Follow number should be (inclusive) between 1 and 998", nameof(followNumber));
@@ -80,14 +80,16 @@ public static class NationalRegisterNumber
         return $"{birthDatePart}{followNumberPart}{controlNumberPart}";
     }
 
-    public static string Generate() => Generate(GenerateBirthDate(), Randomizer.Next(FollowNumberMin, FollowNumberMax));
-    public static string Generate(DateTime birthDate) => Generate(birthDate, Randomizer.Next(FollowNumberMin, FollowNumberMax));
+    public static string Generate() => Generate(GenerateBirthDate(), GenerateFollowNumber());
+    public static string Generate(DateTime birthDate) => Generate(birthDate, GenerateFollowNumber());
     public static string Generate(BiologicalSex sex) => Generate(GenerateBirthDate(), GenerateFollowNumber(sex));
     public static string Generate(DateTime birthDate, BiologicalSex sex) => Generate(birthDate, GenerateFollowNumber(sex));
+    public static string Generate(DateTime minDate, DateTime maxDate) => Generate(GenerateBirthDate(minDate, maxDate));
+    public static string Generate(DateTime minDate, DateTime maxDate, BiologicalSex sex) => Generate(GenerateBirthDate(minDate, maxDate), sex);
 
     private static int GenerateFollowNumber(BiologicalSex sex)
     {
-        var followNumber = Randomizer.Next(FollowNumberMin, FollowNumberMax);
+        var followNumber = GenerateFollowNumber();
         if (sex == BiologicalSex.Female)
         {
             if (followNumber % 2 != 0)
@@ -100,10 +102,15 @@ public static class NationalRegisterNumber
         }
         return followNumber;
     }
-
-    private static DateTime GenerateBirthDate()
+    private static int GenerateFollowNumber() => Randomizer.Next(FollowNumberMin, FollowNumberMax);
+    private static DateTime GenerateBirthDate() => GenerateBirthDate(AbsoluteMinDate, DateTime.Today);
+    private static DateTime GenerateBirthDate(DateTime minDate, DateTime maxDate)
     {
-        var range = (DateTime.Today - AbsoluteMinDate).Days;
-        return AbsoluteMinDate.AddDays(Randomizer.Next(range));
+        if (minDate > maxDate)
+            throw new ArgumentException($"Minimum date {minDate} can't be after maximum date {maxDate}");
+
+        var range = (maxDate.Date - minDate.Date).Days;
+        return minDate.Date.AddDays(Randomizer.Next(range));
     }
+
 }
