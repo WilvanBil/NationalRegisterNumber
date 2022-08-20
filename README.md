@@ -1,5 +1,5 @@
 # National Register Number
-National Register Number is a package that can generate and validate Belgian national register numbers.
+National Register Number is a package that can generate and validate Belgian national register numbers. The logic is based on [Official Documentation by the Belgian Government](https://www.ibz.rrn.fgov.be/fileadmin/user_upload/nl/rr/instructies/IT-lijst/IT000_Rijksregisternummer.pdf)
 
 ## Installation
 TODO
