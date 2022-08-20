@@ -1,5 +1,5 @@
-using System;
 using FluentAssertions;
+using NationalRegisterNumber;
 using NUnit.Framework;
 
 namespace NationalRegisterNumberTests;
@@ -11,7 +11,7 @@ public class NationalRegisterNumberTests
     public void ValidateShouldReturnTrue(string nationalRegisterNumber)
     {
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.IsValid(nationalRegisterNumber);
+        var result = NationalRegisterNumberGenerator.IsValid(nationalRegisterNumber);
 
         // Assert
         result.Should().BeTrue();
@@ -28,7 +28,7 @@ public class NationalRegisterNumberTests
     public void ValidateShouldReturnFalse(string nationalRegisterNumber)
     {
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.IsValid(nationalRegisterNumber);
+        var result = NationalRegisterNumberGenerator.IsValid(nationalRegisterNumber);
 
         // Assert
         result.Should().BeFalse();
@@ -42,10 +42,10 @@ public class NationalRegisterNumberTests
         var followNumber = 16;
 
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate(birthDate, followNumber);
+        var result = NationalRegisterNumberGenerator.Generate(birthDate, followNumber);
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
     }
 
@@ -53,10 +53,10 @@ public class NationalRegisterNumberTests
     public void GenerateShouldWork()
     {
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate();
+        var result = NationalRegisterNumberGenerator.Generate();
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
     }
 
@@ -67,7 +67,7 @@ public class NationalRegisterNumberTests
         var reallyOldDate = new DateTime(1889, 12, 5);
 
         // Act
-        var result = () => NationalRegisterNumber.NationalRegisterNumber.Generate(reallyOldDate);
+        var result = () => NationalRegisterNumberGenerator.Generate(reallyOldDate);
 
         // Assert
         result.Should().Throw<ArgumentException>();
@@ -80,7 +80,7 @@ public class NationalRegisterNumberTests
         var futureDate = DateTime.Today.AddDays(10);
 
         // Act
-        var result = () => NationalRegisterNumber.NationalRegisterNumber.Generate(futureDate);
+        var result = () => NationalRegisterNumberGenerator.Generate(futureDate);
 
         // Assert
         result.Should().Throw<ArgumentException>();
@@ -96,7 +96,7 @@ public class NationalRegisterNumberTests
         var validDate = new DateTime(1998, 1, 1);
 
         // Act
-        var result = () => NationalRegisterNumber.NationalRegisterNumber.Generate(validDate, followNumber);
+        var result = () => NationalRegisterNumberGenerator.Generate(validDate, followNumber);
 
         // Assert
         result.Should().Throw<ArgumentException>();
@@ -109,10 +109,10 @@ public class NationalRegisterNumberTests
         var birthdate = new DateTime(2000, 1, 1);
 
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate(birthdate);
+        var result = NationalRegisterNumberGenerator.Generate(birthdate);
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
     }
 
@@ -120,10 +120,10 @@ public class NationalRegisterNumberTests
     public void GenerateWithBiologicalSexFemaleShouldWork()
     {
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate(NationalRegisterNumber.BiologicalSex.Female);
+        var result = NationalRegisterNumberGenerator.Generate(NationalRegisterNumber.BiologicalSex.Female);
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
         var digit = int.Parse(result[8].ToString());
         var even = digit % 2 == 0;
@@ -134,14 +134,14 @@ public class NationalRegisterNumberTests
     public void GenerateWithBiologicalSexmaleShouldWork()
     {
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate(NationalRegisterNumber.BiologicalSex.Male);
+        var result = NationalRegisterNumberGenerator.Generate(NationalRegisterNumber.BiologicalSex.Male);
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
         var digit = int.Parse(result[8].ToString());
-        var even = digit % 2 != 0;
-        even.Should().BeTrue();
+        var uneven = digit % 2 != 0;
+        uneven.Should().BeTrue();
     }
 
     [Test]
@@ -149,16 +149,64 @@ public class NationalRegisterNumberTests
     {
         // Arrange
         var birthdate = new DateTime(2000, 1, 1);
-        var sex = NationalRegisterNumber.BiologicalSex.Male;
+        var sex = BiologicalSex.Male;
 
         // Act
-        var result = NationalRegisterNumber.NationalRegisterNumber.Generate(birthdate, sex);
+        var result = NationalRegisterNumberGenerator.Generate(birthdate, sex);
 
         // Assert
-        var assertion = NationalRegisterNumber.NationalRegisterNumber.IsValid(result);
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
         assertion.Should().BeTrue();
         var digit = int.Parse(result[8].ToString());
-        var even = digit % 2 != 0;
+        var uneven = digit % 2 != 0;
+        uneven.Should().BeTrue();
+    }
+
+    [Test]
+    public void GenerateWithDateRangeShouldWork()
+    {
+        // Arrange
+        var minDate = new DateTime(2000, 1, 1);
+        var maxDate = new DateTime(2010, 12, 31);
+
+        // Act
+        var result = NationalRegisterNumberGenerator.Generate(minDate, maxDate);
+
+        // Assert
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
+        assertion.Should().BeTrue();
+    }
+
+    [Test]
+    public void GenerateWithWrongDateRangeShouldThrowError()
+    {
+        // Arrange
+        var minDate = new DateTime(2005, 1, 1);
+        var maxDate = new DateTime(1997, 12, 31);
+
+        // Act
+        var result = () => NationalRegisterNumberGenerator.Generate(minDate, maxDate);
+
+        // Assert
+        result.Should().Throw<ArgumentException>();
+    }
+
+    [Test]
+    public void GenerateWithDateRangeAndBiologicalSexShouldWork()
+    {
+        // Arrange
+        var minDate = new DateTime(2000, 1, 1);
+        var maxDate = new DateTime(2010, 12, 31);
+        var sex = BiologicalSex.Female;
+
+        // Act
+        var result = NationalRegisterNumberGenerator.Generate(minDate, maxDate, sex);
+
+        // Assert
+        var assertion = NationalRegisterNumberGenerator.IsValid(result);
+        assertion.Should().BeTrue();
+        var digit = int.Parse(result[8].ToString());
+        var even = digit % 2 == 0;
         even.Should().BeTrue();
     }
 }
