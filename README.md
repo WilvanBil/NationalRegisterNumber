@@ -10,6 +10,7 @@ After installation you can use the static class `NationalRegisterNumberGenerator
 **Validate**
 
 This will return true or false based on input.
+
 `NationalRegisterNumberGenerator.IsValid(string here)`
 
 **Generate**
