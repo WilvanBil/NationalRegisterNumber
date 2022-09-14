@@ -33,3 +33,4 @@ Keep in mind that the absolute `minDate` is `1900/01/01` and the absolute `maxDa
 
 ## !!WARNING!!
 Only use the package for test and research purposes. Do **not** use it in a live/production environment. It should only be used for unit/integration testing.
+

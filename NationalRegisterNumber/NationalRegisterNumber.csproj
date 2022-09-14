@@ -1,9 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>WilvanBil.$(AssemblyName)</PackageId>
+    <Authors>WilvanBil, Willy Alde</Authors>
+    <Description>Generate Belgian national register numbers based on parameters.</Description>
+    <PackageProjectUrl>https://github.com/WilvanBil/NationalRegisterNumber</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/WilvanBil/NationalRegisterNumber</RepositoryUrl>
+    <PackageTags>WilvanBil Belgium Belgian National Register Registry Number Unit Integration Testing</PackageTags>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>C:\Users\WiAl\source\repos\NationalRegisterNumber\LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
