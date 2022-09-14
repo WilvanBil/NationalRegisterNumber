@@ -13,13 +13,14 @@
     <RepositoryUrl>https://github.com/WilvanBil/NationalRegisterNumber</RepositoryUrl>
     <PackageTags>WilvanBil Belgium Belgian National Register Registry Number Unit Integration Testing</PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>C:\Users\WiAl\source\repos\NationalRegisterNumber\LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
