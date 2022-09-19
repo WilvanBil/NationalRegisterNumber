@@ -18,6 +18,8 @@ public class NationalRegisterNumberTests
     }
 
     [TestCase("12345678910")]
+    [TestCase("12345621748")]
+    [TestCase("12345621777")]
     [TestCase("Test")]
     [TestCase("00000000000")]
     [TestCase("99999999999")]

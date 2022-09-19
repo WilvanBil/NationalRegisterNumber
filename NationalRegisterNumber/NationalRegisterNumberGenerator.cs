@@ -1,4 +1,6 @@
-﻿namespace NationalRegisterNumber;
+using System.Globalization;
+
+namespace NationalRegisterNumber;
 
 public static class NationalRegisterNumberGenerator
 {
@@ -27,21 +29,31 @@ public static class NationalRegisterNumberGenerator
         if (string.IsNullOrEmpty(numbersOnly) || numbersOnly.Length != 11)
             return false;
 
+        // check date
+
+        if (!DateTime.TryParseExact(
+         numbersOnly[..6],
+         "yyMMdd",
+         CultureInfo.InvariantCulture,
+         DateTimeStyles.None,
+         out var d))
+            return false;
+
         // Check control number
-        if (!long.TryParse(nationalRegisterNumber[..9], out var dividend))
+        if (!long.TryParse(numbersOnly[..9], out var dividend))
             return false;
 
         var remainder = dividend % Divisor;
         var controlNumber = Divisor - remainder;
 
-        if (!long.TryParse(nationalRegisterNumber[9..], out var actualControlNumber))
+        if (!long.TryParse(numbersOnly[9..], out var actualControlNumber))
             return false;
 
         // Born before 2000/01/01
         if (controlNumber == actualControlNumber)
             return true;
 
-        if (!long.TryParse($"2{nationalRegisterNumber[..9]}", out dividend))
+        if (!long.TryParse($"2{numbersOnly[..9]}", out dividend))
             return false;
 
         remainder = dividend % Divisor;
