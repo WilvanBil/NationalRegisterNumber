@@ -2,10 +2,8 @@
 National Register Number is a package that can generate and validate Belgian national register numbers. The logic is based on [Official Documentation by the Belgian Government](https://www.ibz.rrn.fgov.be/fileadmin/user_upload/nl/rr/instructies/IT-lijst/IT000_Rijksregisternummer.pdf)
 
 ## Installation
-`dotnet add package WilvanBil.NationalRegisterNumber --version 1.0.0`  
-Or through a packet reference:  
-`<PackageReference Include="WilvanBil.NationalRegisterNumber" Version="1.0.0" />`   
-Or search it on NuGet Package Manager.
+`dotnet add package WilvanBil.NationalRegisterNumber`  
+Or find it on NuGet Package Manager.
 
 ## Usage
 After installation you can use the static class `NationalRegisterNumberGenerator` to generate or validate your national register numbers.
