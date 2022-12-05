@@ -2,7 +2,7 @@ using FluentAssertions;
 using NationalRegisterNumber;
 using NUnit.Framework;
 
-namespace NationalRegisterNumberTests;
+namespace NationalRegisterNumber.UnitTests;
 
 [TestFixture]
 public class NationalRegisterNumberTests
@@ -122,7 +122,7 @@ public class NationalRegisterNumberTests
     public void GenerateWithBiologicalSexFemaleShouldWork()
     {
         // Act
-        var result = NationalRegisterNumberGenerator.Generate(NationalRegisterNumber.BiologicalSex.Female);
+        var result = NationalRegisterNumberGenerator.Generate(BiologicalSex.Female);
 
         // Assert
         var assertion = NationalRegisterNumberGenerator.IsValid(result);
@@ -136,7 +136,7 @@ public class NationalRegisterNumberTests
     public void GenerateWithBiologicalSexmaleShouldWork()
     {
         // Act
-        var result = NationalRegisterNumberGenerator.Generate(NationalRegisterNumber.BiologicalSex.Male);
+        var result = NationalRegisterNumberGenerator.Generate(BiologicalSex.Male);
 
         // Assert
         var assertion = NationalRegisterNumberGenerator.IsValid(result);
